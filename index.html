@@ -34,6 +34,7 @@
                     <li data-api="generation">Geração</li>
                     <li data-api="location">Localização</li>
                     <li data-api="region">Região</li>
+                    <li id="minigame-btn">Quem É Este Pokémon?</li>
                 </ul>
             </nav>
         </header>
@@ -45,6 +46,18 @@
 
         <div id="screen-border">
             <div id="resultado"></div>
+            
+            <section id="minigame-container" class="hidden">
+                <h2>Quem É Este Pokémon?</h2>
+                <div class="pokemon-display">
+                    <img id="pokemon-shadow" src="" alt="Sombra do Pokémon" class="shadow" />
+                    <img id="pokemon-revealed" src="" alt="Pokémon Revelado" class="revealed hidden" />
+                </div>
+                <input type="text" id="guess-input" placeholder="Qual Pokémon é este?" />
+                <button id="btn-guess">Adivinhar</button>
+                <p id="minigame-feedback"></p>
+                <button id="btn-next-pokemon" class="hidden">Próximo Pokémon</button>
+            </section>
         </div>
     </div>
 
