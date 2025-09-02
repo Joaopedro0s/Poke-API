@@ -56,7 +56,7 @@ menuItems.forEach(item => {
     item.addEventListener("click", () => {
         menuItems.forEach(i => i.classList.remove("active"));
         item.classList.add("active");
-        resultado.innerHTML = ""; // Limpa o resultado anterior
+        resultado.innerHTML = "";
 
         if (item.id !== "minigame-btn") {
             searchContainer.classList.remove("hidden");
@@ -68,7 +68,6 @@ menuItems.forEach(item => {
             searchInput.placeholder = placeholders[currentApiEndpoint];
             searchInput.focus();
 
-            // Lógica para exibir os cards de pré-visualização
             displayPreviewCards(currentApiEndpoint);
             
         } else {
@@ -94,11 +93,9 @@ searchInput.addEventListener("keyup", (e) => {
     }
 });
 
-// Nova função para exibir os cards de pré-visualização
 async function displayPreviewCards(endpoint) {
     resultado.innerHTML = "<p>Carregando...</p>";
     
-    // A maioria das APIs usa a URL base + endpoint para obter a lista.
     const url = API_BASE + endpoint + "?limit=3";
 
     try {
@@ -108,14 +105,12 @@ async function displayPreviewCards(endpoint) {
         
         let cardHtml = '<div class="preview-cards-container">';
         
-        // Mapeia os resultados da API para gerar os cards
-        const itemsToDisplay = data.results || data; // 'results' para listas, 'data' para casos específicos
+        const itemsToDisplay = data.results || data;
         
         for (const item of itemsToDisplay) {
             let name = item.name;
             let imageUrl = '';
             
-            // Lógica para obter a imagem de cada item
             if (endpoint === 'pokemon') {
                 const pokemonRes = await fetch(item.url);
                 const pokemonData = await pokemonRes.json();
@@ -143,7 +138,7 @@ async function displayPreviewCards(endpoint) {
 }
 
 
-// Lógica do Minigame (mantida do passo anterior)
+// Lógica do Minigame
 async function startMinigame() {
     if (isLoadingPokemon) return;
     isLoadingPokemon = true;
@@ -206,7 +201,7 @@ function checkGuess() {
         minigameFeedback.classList.remove("wrong");
         minigameFeedback.classList.add("correct");
         revealPokemon();
-        playPokemonCry(currentPokemon); // Adiciona o som
+        playPokemonCry(currentPokemon);
     } else {
         minigameFeedback.textContent = "Errado! Tente novamente.";
         minigameFeedback.classList.remove("correct");
@@ -245,7 +240,6 @@ async function pesquisar(tipo, termo) {
 
         resultado.innerHTML = montarResultado(tipo, data);
 
-        // Se o tipo for 'pokemon', reproduza o som
         if (tipo === "pokemon") {
             playPokemonCry(data.name);
         }
@@ -255,20 +249,23 @@ async function pesquisar(tipo, termo) {
     }
 }
 
-// NOVA FUNÇÃO: Reproduz o som do Pokémon
+// Função para reproduzir o som do Pokémon
 function playPokemonCry(pokemonName) {
     const normalizedName = pokemonName.toLowerCase().replace(/['.]/g, '');
     const audio = new Audio(`https://play.pokemonshowdown.com/audio/cries/${normalizedName}.mp3`);
-    audio.volume = 0.5; // Ajuste o volume se necessário
+    audio.volume = 0.5;
     audio.play().catch(e => console.error("Erro ao reproduzir áudio:", e));
 }
 
 function montarResultado(tipo, data) {
     switch(tipo) {
         case "pokemon":
+            // Novo URL para o sprite animado (GIF)
+            const animatedSpriteUrl = `https://play.pokemonshowdown.com/sprites/gen5ani/${data.name.toLowerCase()}.gif`;
+
             return `
                 <h2>${data.name.toUpperCase()} (#${data.id})</h2>
-                <img src="${data.sprites.front_default}" alt="${data.name}" />
+                <img src="${animatedSpriteUrl}" alt="${data.name}" />
                 <p><strong>Tipos:</strong> ${data.types.map(t => t.type.name).join(", ")}</p>
                 <p><strong>Habilidades:</strong> ${data.abilities.map(a => a.ability.name).join(", ")}</p>
                 <p><strong>Movimentos (${data.moves.length}):</strong></p>
