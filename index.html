@@ -3,33 +3,50 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PokeAPI - Pesquisa</title>
+    <title>PokeAPI - Pokédex</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul id="menu">
-                <li data-api="pokemon">Pokémon</li>
-                <li data-api="pokemon-species">Espécies</li>
-                <li data-api="type">Tipos</li>
-                <li data-api="move">Movimentos</li>
-                <li data-api="ability">Habilidades</li>
-                <li data-api="item">Itens</li>
-                <li data-api="evolution-chain">Método de Evolução</li>
-                <li data-api="generation">Geração</li>
-                <li data-api="location">Localização</li>
-                <li data-api="region">Região</li>
-            </ul>
-        </nav>
-    </header>
+    <div id="pokedex-body" class="pokedex-closed">
+        <div class="top-section">
+            <div class="circle large-blue"></div>
+            <div class="circle small-red"></div>
+            <div class="circle small-yellow"></div>
+            <div class="circle small-green"></div>
+        </div>
 
-    <section id="search-container" class="hidden">
-        <input type="text" id="search-input" placeholder="Digite o termo para pesquisar" />
-        <button id="btn-search">Buscar</button>
-    </section>
+        <div id="left-half" class="pokedex-half"></div>
+        <div id="right-half" class="pokedex-half"></div>
 
-    <section id="resultado"></section>
+        <header>
+            <nav>
+                <ul id="menu">
+                    <li data-api="pokemon">Pokémon</li>
+                    <li data-api="pokemon-species">Espécies</li>
+                    <li data-api="type">Tipos</li>
+                    <li data-api="move">Movimentos</li>
+                    <li data-api="ability">Habilidades</li>
+                    <li data-api="item">Itens</li>
+                    <li data-api="evolution-chain">Evolução</li>
+                    <li data-api="generation">Geração</li>
+                    <li data-api="location">Localização</li>
+                    <li data-api="region">Região</li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="search-container" class="hidden">
+            <input type="text" id="search-input" placeholder="Digite o termo para pesquisar" />
+            <button id="btn-search">Buscar</button>
+        </section>
+
+        <div id="screen-border">
+            <div id="resultado"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

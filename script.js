@@ -5,6 +5,9 @@ const searchContainer = document.getElementById("search-container");
 const searchInput = document.getElementById("search-input");
 const btnSearch = document.getElementById("btn-search");
 const resultado = document.getElementById("resultado");
+const pokedexBody = document.getElementById("pokedex-body");
+const leftHalf = document.getElementById("left-half");
+const rightHalf = document.getElementById("right-half");
 
 let currentApiEndpoint = null;
 
@@ -15,11 +18,30 @@ const placeholders = {
     "move": "Digite o nome ou ID do movimento",
     "ability": "Digite o nome ou ID da habilidade",
     "item": "Digite o nome ou ID do item",
-    "evolution-chain": "Digite o ID do Pokemon",
+    "evolution-chain": "Digite o ID da cadeia de evolução",
     "generation": "Digite o nome ou ID da geração",
     "location": "Digite o nome ou ID da localização",
     "region": "Digite o nome ou ID da região",
 };
+
+// Nova função para a animação de abertura
+function openPokedex() {
+    setTimeout(() => {
+        pokedexBody.classList.add("pokedex-open");
+        leftHalf.style.transform = "translateX(-100%) translateY(-50%)";
+        rightHalf.style.transform = "translateX(100%) translateY(-50%)";
+    }, 500);
+
+    // Remove as metades e ativa a rolagem após a animação
+    setTimeout(() => {
+        leftHalf.style.display = "none";
+        rightHalf.style.display = "none";
+        document.body.style.overflow = "auto"; // Adiciona esta linha para permitir a rolagem
+    }, 1500);
+}
+
+// Chama a função de animação quando a página carrega
+window.addEventListener("load", openPokedex);
 
 menuItems.forEach(item => {
     item.addEventListener("click", () => {
@@ -82,7 +104,10 @@ function montarResultado(tipo, data) {
                 <img src="${data.sprites.front_default}" alt="${data.name}" />
                 <p><strong>Tipos:</strong> ${data.types.map(t => t.type.name).join(", ")}</p>
                 <p><strong>Habilidades:</strong> ${data.abilities.map(a => a.ability.name).join(", ")}</p>
-                <p><strong>Movimentos (5 primeiros):</strong> ${data.moves.slice(0,5).map(m => m.move.name).join(", ")}</p>
+                <p><strong>Movimentos (${data.moves.length}):</strong></p>
+                <ul class="moves-list">
+                    ${data.moves.map(m => `<li>${m.move.name}</li>`).join("")}
+                </ul>
                 <p><strong>Altura:</strong> ${data.height / 10} m</p>
                 <p><strong>Peso:</strong> ${data.weight / 10} kg</p>
             `;
@@ -141,42 +166,22 @@ function montarResultado(tipo, data) {
             return `
                 <h2>Região: ${data.name.toUpperCase()}</h2>
                 <p><strong>Locais (máx 10):</strong> ${data.locations.slice(0,10).map(l => l.name).join(", ")}</p>
-                <p><strong>Gerações:</strong> ${data.generation ? data.generation.name : "Desconhecido"}</p>
+                <p><strong>Principais cidades:</strong> ${data.main_generation.name}</p>
             `;
         default:
-            return "<p>Tipo de pesquisa não implementado.</p>";
+            return `<p>Tipo de dado não suportado.</p>`;
     }
 }
 
 function parseEvolutionChainDetailed(chain) {
-    function formatEvolutionDetails(details) {
-        if (!details || details.length === 0) return "";
-        let d = details[0];
-        let parts = [];
+    let result = [];
 
-        if (d.min_level) parts.push(`nível ${d.min_level}`);
-        if (d.item) parts.push(`item: ${d.item.name}`);
-        if (d.trigger) parts.push(`gatilho: ${d.trigger.name}`);
-        if (d.time_of_day && d.time_of_day !== "") parts.push(`hora do dia: ${d.time_of_day}`);
-        if (d.held_item) parts.push(`item segurado: ${d.held_item.name}`);
-        if (d.min_happiness) parts.push(`felicidade mínima: ${d.min_happiness}`);
-        if (d.location) parts.push(`local: ${d.location.name}`);
-
-        return parts.length > 0 ? ` (${parts.join(", ")})` : "";
+    function traverse(node) {
+        result.push(node.species.name);
+        node.evolves_to.forEach(e => traverse(e));
     }
 
-    function recurse(node) {
-        let str = node.species.name;
-        if (node.evolution_details && node.evolution_details.length > 0) {
-            str += formatEvolutionDetails(node.evolution_details);
-        }
+    traverse(chain);
 
-        if (node.evolves_to && node.evolves_to.length > 0) {
-            str += " → ";
-            str += node.evolves_to.map(evo => recurse(evo)).join(" / ");
-        }
-        return str;
-    }
-
-    return recurse(chain);
+    return result.map(name => `<strong>${name}</strong>`).join(" → ");
 }
