@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poke API</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PokeAPI - Pesquisa</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    
+    <header>
+        <nav>
+            <ul id="menu">
+                <li data-api="pokemon">Pokémon</li>
+                <li data-api="pokemon-species">Espécies</li>
+                <li data-api="type">Tipos</li>
+                <li data-api="move">Movimentos</li>
+                <li data-api="ability">Habilidades</li>
+                <li data-api="item">Itens</li>
+                <li data-api="evolution-chain">Método de Evolução</li>
+                <li data-api="generation">Geração</li>
+                <li data-api="location">Localização</li>
+                <li data-api="region">Região</li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="search-container" class="hidden">
+        <input type="text" id="search-input" placeholder="Digite o termo para pesquisar" />
+        <button id="btn-search">Buscar</button>
+    </section>
+
+    <section id="resultado"></section>
+
+    <script src="script.js"></script>
 </body>
 </html>
